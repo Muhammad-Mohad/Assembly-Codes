@@ -1,0 +1,23 @@
+     1                                  [org 0x0100]
+     2                                  
+     3 00000000 B80500                  mov ax, 5
+     4 00000003 89C2                    mov dx, ax
+     5 00000005 89C3                    mov bx, ax
+     6 00000007 83EB02                  sub bx, 2
+     7 0000000A 89D9                    mov cx, bx
+     8                                  
+     9                                  loop1:
+    10                                  
+    11                                  loop2:
+    12 0000000C 01D0                    	add ax, dx
+    13 0000000E 83E901                  	sub cx, 1
+    14 00000011 75F9                    	jnz loop2
+    15                                  	
+    16 00000013 89C2                    	mov dx, ax
+    17 00000015 89D9                    	mov cx, bx
+    18 00000017 83E901                  	sub cx, 1
+    19 0000001A 83EB01                  	sub bx, 1
+    20 0000001D 75ED                    	jnz loop1
+    21                                  
+    22 0000001F B8004C                  mov ax, 0x4c00 ; terminate program
+    23 00000022 CD21                    int 0x21

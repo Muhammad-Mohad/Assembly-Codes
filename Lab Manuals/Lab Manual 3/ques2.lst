@@ -1,0 +1,28 @@
+     1                                  [org 0x0100]
+     2                                  
+     3 00000000 B90A00                  mov cx, 10
+     4 00000003 BE0000                  mov si, 0
+     5 00000006 BF0200                  mov di, 2
+     6                                  
+     7                                  elimination:
+     8 00000009 BA0000                  	mov dx, 0
+     9 0000000C 8994[2E00]              	mov [array + si], dx
+    10 00000010 EB0C                    	jmp aftereliminate
+    11                                  	
+    12                                  loop:
+    13 00000012 8B84[2E00]              	mov ax, [array + si]
+    14 00000016 8B9D[2E00]              	mov bx, [array + di]
+    15 0000001A 39D8                    	cmp ax, bx
+    16 0000001C 74EB                    	je elimination
+    17                                  	aftereliminate:
+    18 0000001E 83C602                  	add si, 2
+    19 00000021 83C702                  	add di, 2
+    20 00000024 83E901                  	sub cx, 1
+    21 00000027 75E9                    	jnz loop
+    22                                  	
+    23 00000029 B8004C                  mov ax, 0x4c00
+    24 0000002C CD21                    int 0x21
+    25                                  
+    26 0000002E 020002000200030004-     array: dw 2,2,2,3,4,4,5,5,5,6
+    26 00000037 000400050005000500-
+    26 00000040 0600               
