@@ -19,5 +19,5 @@
     19 0000001A 83EB01                  	sub bx, 1
     20 0000001D 75ED                    	jnz loop1
     21                                  
-    22 0000001F B8004C                  mov ax, 0x4c00 ; terminate program
+    22 0000001F B8004C                  mov ax, 0x4c00
     23 00000022 CD21                    int 0x21
