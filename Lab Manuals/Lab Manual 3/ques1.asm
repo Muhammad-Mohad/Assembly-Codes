@@ -19,5 +19,5 @@ loop2:
 	sub bx, 1
 	jnz loop1
 
-mov ax, 0x4c00 ; terminate program
+mov ax, 0x4c00
 int 0x21
