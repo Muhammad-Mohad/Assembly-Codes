@@ -1,0 +1,54 @@
+     1                                  [org 0x0100]
+     2                                  
+     3 00000000 EB26                    jmp start
+     4                                  
+     5 00000002 0100040006000000        set1: dw 1, 4, 6, 0     
+     6 0000000A 010003000600080000-     set2: dw 1, 3, 6, 8, 0   
+     6 00000013 00                 
+     7 00000014 000000000000000000-     intersection_set: dw 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+     7 0000001D 000000000000000000-
+     7 00000026 0000               
+     8                                  
+     9                                  start:
+    10 00000028 BE[0200]                    mov si, set1      
+    11 0000002B BF[0A00]                    mov di, set2       
+    12 0000002E BB[1400]                    mov bx, intersection_set  
+    13                                  
+    14                                  process_intersection:
+    15                                  
+    16 00000031 8B04                        mov ax, [si]      
+    17 00000033 8B15                        mov dx, [di]     
+    18                                  
+    19 00000035 83F800                      cmp ax, 0
+    20 00000038 7424                        je set1_done
+    21 0000003A 83FA00                      cmp dx, 0
+    22 0000003D 741F                        je set2_done
+    23                                  
+    24                                      ; Compare elements from set1 and set2
+    25 0000003F 39D0                        cmp ax, dx
+    26 00000041 740E                        je equal_elements  
+    27 00000043 7C02                        jl set1_less        
+    28 00000045 7F05                        jg set2_less       
+    29                                  
+    30                                  set1_less:
+    31 00000047 83C602                      add si, 2           
+    32 0000004A EBE5                        jmp process_intersection
+    33                                  
+    34                                  set2_less:
+    35 0000004C 83C702                      add di, 2           
+    36 0000004F EBE0                        jmp process_intersection
+    37                                  
+    38                                  equal_elements:
+    39                                      ; Insert equal element into intersection_set
+    40 00000051 8907                        mov [bx], ax       
+    41 00000053 83C602                      add si, 2           
+    42 00000056 83C702                      add di, 2         
+    43 00000059 83C302                      add bx, 2           
+    44 0000005C EBD3                        jmp process_intersection
+    45                                  
+    46                                  set1_done:
+    47                                  set2_done:
+    48                                  
+    49 0000005E C7070000                    mov word [bx], 0
+    50 00000062 B8004C                      mov ax, 0x4c00
+    51 00000065 CD21                        int 0x21

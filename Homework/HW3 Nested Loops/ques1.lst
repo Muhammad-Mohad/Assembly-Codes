@@ -1,0 +1,40 @@
+     1                                  [org 0x0100]
+     2                                  
+     3 00000000 EB14                    jmp start
+     4                                  
+     5 00000002 090003000400020011-     numbers: dw  9, 3, 4, 2, 17, 9, -12, 4, 8, 1  
+     5 0000000B 000900F4FF04000800-
+     5 00000014 0100               
+     6                                  
+     7                                  start:
+     8 00000016 BE[0200]                    mov si, numbers      
+     9 00000019 B90A00                      mov cx, 10             
+    10                                  
+    11 0000001C 8B04                        mov ax, [si]           
+    12 0000001E 89C3                        mov bx, ax          ; bx will store the minimum number
+    13 00000020 89C2                        mov dx, ax          ; dx will store the maximum number
+    14 00000022 83C602                      add si, 2        
+    15 00000025 83E901                      sub cx, 1
+    16 00000028 7500                        jnz find_min_max              
+    17                                  
+    18                                  find_min_max:
+    19 0000002A 8B04                        mov ax, [si]           
+    20 0000002C 39D8                        cmp ax, bx             
+    21 0000002E 7C06                        jl update_min          
+    22 00000030 39D0                        cmp ax, dx             
+    23 00000032 7F06                        jg update_max         
+    24 00000034 EB06                        jmp next_number       
+    25                                  
+    26                                  update_min:
+    27 00000036 89C3                        mov bx, ax            
+    28 00000038 EB02                        jmp next_number
+    29                                  
+    30                                  update_max:
+    31 0000003A 89C2                        mov dx, ax           
+    32                                  
+    33                                  next_number:
+    34 0000003C 83C602                      add si, 2              
+    35 0000003F E2E9                        loop find_min_max      
+    36                                  
+    37 00000041 B8004C                      mov ax, 0x4c00
+    38 00000044 CD21                        int 0x21
