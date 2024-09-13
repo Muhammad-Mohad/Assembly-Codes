@@ -1,0 +1,18 @@
+     1                                  [org 0x0100]
+     2                                  
+     3 00000000 EB08                    jmp start
+     4 00000002 4323434514323412        num: dq 0x1234321445432343
+     5                                  
+     6                                  start:
+     7 0000000A A1[0200]                mov ax, [num]
+     8 0000000D 8B1E[0400]              mov bx, [num + 2]
+     9 00000011 8B0E[0600]              mov cx, [num + 4]
+    10 00000015 8B16[0800]              mov dx, [num + 6]
+    11                                  
+    12 00000019 D1E0                    shl ax, 1
+    13 0000001B D1D3                    rcl word bx, 1
+    14 0000001D D1D1                    rcl word cx, 1 
+    15 0000001F D1D2                    rcl word dx, 1
+    16                                  
+    17 00000021 B8004C                  mov ax,0x4c00
+    18 00000024 CD21                    int 0x21
