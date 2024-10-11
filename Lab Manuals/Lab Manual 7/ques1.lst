@@ -1,0 +1,101 @@
+     1                                  [org 0x0100]
+     2 00000000 EB79                    jmp start
+     3 00000002 20                      message: db ' '
+     4 00000003 0100                    length: dw 1
+     5 00000005 06                      clrscr: push es
+     6 00000006 50                      push ax
+     7 00000007 57                      push di
+     8                                  
+     9 00000008 B800B8                  mov ax, 0xb800
+    10 0000000B 8EC0                    mov es, ax
+    11 0000000D BF0000                  mov di, 0
+    12                                  
+    13 00000010 26C7052007              nextloc: mov word [es:di], 0x0720
+    14 00000015 83C702                  add di, 2
+    15 00000018 81FFA00F                cmp di, 4000
+    16 0000001C 75F2                    jne nextloc
+    17                                  
+    18 0000001E 5F                      pop di
+    19 0000001F 58                      pop ax
+    20 00000020 07                      pop es
+    21 00000021 C3                      ret
+    22                                  delay:
+    23 00000022 55                      push bp
+    24 00000023 89E5                    mov bp,sp
+    25 00000025 51                      push cx
+    26 00000026 B9FFFF                  mov cx,0xffff
+    27                                  delay1:
+    28 00000029 E2FE                    loop delay1
+    29 0000002B 59                      pop cx
+    30 0000002C 5D                      pop bp
+    31 0000002D C3                      ret
+    32 0000002E 55                      print_rect: push bp
+    33 0000002F 89E5                    mov bp, sp
+    34 00000031 06                      push es
+    35 00000032 50                      push ax
+    36 00000033 51                      push cx
+    37 00000034 56                      push si
+    38 00000035 57                      push di
+    39 00000036 53                      push bx
+    40 00000037 52                      push dx
+    41                                  
+    42 00000038 B800B8                  mov ax, 0xb800
+    43 0000003B 8EC0                    mov es, ax
+    44 0000003D BF0000                  mov di, 0
+    45                                  
+    46 00000040 8B760A                  mov si, [bp+10]
+    47 00000043 B410                    mov ah, 0x10
+    48 00000045 B08F                    mov al,0x8F
+    49 00000047 BA0000                  mov dx,0
+    50 0000004A 2B5608                  sub dx,[bp+8]
+    51 0000004D 8B5E06                  mov bx , [bp+6]
+    52 00000050 BF0000                  mov di , 0
+    53 00000053 8B7E04                  mov di,[bp + 4]
+    54                                  rect:
+    55 00000056 8B4E08                  mov cx, [bp+8]
+    56                                  
+    57                                  printRectangle:
+    58 00000059 8A04                    mov al,[si]
+    59 0000005B 268905                  mov [es:di], ax
+    60 0000005E 83C702                  add di,2
+    61                                  
+    62 00000061 E2F6                    loop printRectangle
+    63                                  
+    64 00000063 81C7A000                add di,160
+    65 00000067 2B7E08                  sub di,[bp+8]
+    66 0000006A 2B7E08                  sub di,[bp+8]
+    67 0000006D 4B                      dec bx
+    68 0000006E 75E6                    jnz rect
+    69 00000070 5A                      pop dx
+    70 00000071 5B                      pop bx
+    71 00000072 5F                      pop di
+    72 00000073 5E                      pop si
+    73 00000074 59                      pop cx
+    74 00000075 58                      pop ax
+    75 00000076 07                      pop es
+    76 00000077 5D                      pop bp
+    77 00000078 C20600                  ret 6
+    78                                  
+    79                                  start: 
+    80 0000007B E887FF                  call clrscr
+    81                                  
+    82 0000007E B8[0200]                mov ax, message
+    83 00000081 50                      push ax
+    84                                  
+    85 00000082 6A0F                    push 15
+    86 00000084 6A0F                    push 15
+    87 00000086 68D007                  push 2000
+    88 00000089 E8A2FF                  call print_rect
+    89                                  
+    90 0000008C 6A0A                    push 10
+    91 0000008E 6A0A                    push 10
+    92 00000090 68A000                  push 160
+    93 00000093 E898FF                  call print_rect
+    94                                  
+    95 00000096 6A05                    push 5
+    96 00000098 6A05                    push 5
+    97 0000009A 68FE01                  push 510
+    98 0000009D E88EFF                  call print_rect
+    99                                  
+   100 000000A0 B8004C                  mov ax, 0x4c00
+   101 000000A3 CD21                    int 0x21
