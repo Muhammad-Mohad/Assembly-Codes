@@ -1,18 +1,23 @@
 [org 0x0100]
 
-mov bx, [num1]	
-mov cx, [num1]				
-mov ax, 0				
+mov ax, 5
+mov dx, ax
+mov bx, ax
+sub bx, 2
+mov cx, bx
 
-l1:		add ax, bx		
-		sub bx, 1		
-		sub cx, 1		
-		jnz l1	
-				
-mov [total], ax 			
+loop1:
 
-mov ax, 0x4c00 			
+loop2:
+	add ax, dx
+	sub cx, 1
+	jnz loop2
+	
+	mov dx, ax
+	mov cx, bx
+	sub cx, 1
+	sub bx, 1
+	jnz loop1
+
+mov ax, 0x4c00
 int 0x21
-
-num1: dw 6
-total: dw 0

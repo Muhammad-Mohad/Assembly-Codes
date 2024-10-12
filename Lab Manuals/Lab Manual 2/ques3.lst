@@ -1,21 +1,27 @@
      1                                  [org 0x0100]
      2                                  
-     3 00000000 BF0000                  mov di, 0
-     4 00000003 BE0A00                  mov si, 10	
-     5 00000006 B90600                  mov cx, 6				
-     6                                  
-     7 00000009 8B84[2100]              l1:		mov ax, [arr1 + si]	
-     8 0000000D 8985[2D00]              		mov [arr2 + di], ax;
+     3 00000000 EB0A                    	jmp start
+     4 00000002 FBFFFCFF03000200FF-     	num1: dw -5,-4,3,2,-1
+     4 0000000B FF                 
+     5                                  	start:
+     6 0000000C BE0000                  		mov si, 0
+     7                                  	outerloop:
+     8 0000000F 89F7                    		mov di, si
      9 00000011 83C702                  		add di, 2
-    10 00000014 83EE02                  		sub si, 2
-    11 00000017 83E901                  		sub cx, 1		
-    12 0000001A 75ED                    		jnz l1			
-    13                                  						
-    14                                  
-    15 0000001C B8004C                  mov ax, 0x4c00		
-    16 0000001F CD21                    int 0x21
-    17                                  
-    18 00000021 010002000300040005-     arr1:	dw 1, 2, 3, 4, 5, 6
-    18 0000002A 000600             
-    19 0000002D 000000000000000000-     arr2:   dw 0, 0, 0, 0, 0, 0
-    19 00000036 000000             
+    10                                  	innerloop:
+    11 00000014 8B84[0200]              		mov ax, [num1+si]
+    12 00000018 3B85[0200]              		cmp ax, [num1+di]
+    13 0000001C 7C0C                    		jl noswap
+    14 0000001E 8B95[0200]              		mov dx, [num1+di]
+    15 00000022 8994[0200]              		mov [num1+si], dx
+    16 00000026 8985[0200]              		mov [num1+di], ax
+    17                                  	noswap:
+    18 0000002A 83C702                  		add di, 2
+    19 0000002D 83FF0A                  		cmp di, 10
+    20 00000030 72E2                    	jb innerloop
+    21 00000032 83C602                  		add si,2
+    22 00000035 83FE08                  		cmp si, 8
+    23 00000038 72D5                    	jb outerloop
+    24                                  
+    25 0000003A B8004C                  mov ax, 0x4c00
+    26 0000003D CD21                    int 0x21

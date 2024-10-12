@@ -1,17 +1,47 @@
 [org 0x0100]
 
-mov bx, [num1]	
-mov cx, [num1]				
-mov ax, 0				
+mov cx, 10         
+mov si, 0        
+mov di, 2       
 
-l1:		add ax, bx				
-		sub cx, 1		
-		jnz l1	
-				
-mov [square], ax 			
+elimination:
+    mov dx, 0
+    mov [array + si], dx
+    jmp aftereliminate
 
-mov ax, 0x4c00 			
-int 0x21
+loop:
+    mov ax, [array + si] 
+    mov bx, [array + di]  
+    cmp ax, bx             
+    je elimination        
+aftereliminate:
+    add si, 2             
+    add di, 2            
+    sub cx, 1              
+    jnz loop              
 
-num1: dw 5
-square: dw 0
+mov cx, 10         
+mov si, 0         
+mov di, 0         
+zero_pointer:
+    mov ax, [array + si]  
+    cmp ax, 0              
+    je next_element        
+    mov [array + di], ax   
+    add di, 2              
+next_element:
+    add si, 2              
+    loop zero_pointer      
+
+fill_zeros:
+    cmp di, 20             
+    je done                
+    mov word [array + di], 0 
+    add di, 2             
+    jmp fill_zeros        
+
+done:
+    mov ax, 0x4c00        
+    int 0x21
+
+array: dw 2, 2, 2, 3, 4, 4, 5, 5, 5, 6

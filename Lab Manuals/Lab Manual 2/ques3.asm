@@ -1,19 +1,26 @@
 [org 0x0100]
 
-mov di, 0
-mov si, 10	
-mov cx, 6				
-
-l1:		mov ax, [arr1 + si]	
-		mov [arr2 + di], ax;
+	jmp start
+	num1: dw -5,-4,3,2,-1
+	start:
+		mov si, 0
+	outerloop:
+		mov di, si
 		add di, 2
-		sub si, 2
-		sub cx, 1		
-		jnz l1			
-						
+	innerloop:
+		mov ax, [num1+si]
+		cmp ax, [num1+di]
+		jl noswap
+		mov dx, [num1+di]
+		mov [num1+si], dx
+		mov [num1+di], ax
+	noswap:
+		add di, 2
+		cmp di, 10
+	jb innerloop
+		add si,2
+		cmp si, 8
+	jb outerloop
 
-mov ax, 0x4c00		
+mov ax, 0x4c00
 int 0x21
-
-arr1:	dw 1, 2, 3, 4, 5, 6
-arr2:   dw 0, 0, 0, 0, 0, 0

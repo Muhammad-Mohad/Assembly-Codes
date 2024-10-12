@@ -1,18 +1,12 @@
 [org 0x0100]
 
-jmp start
-num: dq 0x1234321445432343
+mov bx, 0x0784
+rol bx, 3
+mov cx, bx
 
-start:
-mov ax, [num]
-mov bx, [num + 2]
-mov cx, [num + 4]
-mov dx, [num + 6]
+mov bx, 0x0784
+ror bx, 4
+mov dx, bx
 
-shl ax, 1
-rcl word bx, 1
-rcl word cx, 1 
-rcl word dx, 1
-
-mov ax,0x4c00
+mov ax, 0x4c00
 int 0x21
